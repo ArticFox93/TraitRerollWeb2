@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trait Rolling</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .trait-roller {
+        margin: 20px auto;
+        padding: 20px;
+        border: 2px solid #333;
+        border-radius: 10px;
+        background-color: black;
+        width: 500px;
+        height: 300px;
+      }
+
+      .trait-display {
+        font-size: 24px;
+        font-weight: bold;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+
+      .roll-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #0077cc;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .roll-button:hover {
+        background-color: #005fa3;
+      }
+
+      .robux-roller {
+        background: linear-gradient(135deg, #4cfd5a, #e1ffea);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+
+      .reroll {
+        background: linear-gradient(135deg, #fb3bf4, #ffabf3);
+        color: white;
+        border: 2px solid black;
+        display: inline;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+
+      .reroll-token {
+        background: linear-gradient(135deg, #ff554d, #4e88fd);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+
+      .main {
+        display: flex;
+        gap: 80px;
+        align-items: center;
+      }
+
+      @keyframes growAndFade {
+        0% {
+          font-size: 20px;
+          opacity: 0;
+        }
+        50% {
+          font-size: 40px;
+          opacity: 1;
+        }
+        100% {
+          font-size: 30px;
+          opacity: 0;
+        }
+      }
+
+      .text-center {
+        font-size: 50px;
+        color: #4cd13e;
+        display: none;
+        animation: growAndFade 0.5s forwards;
+      }
+
+      @keyframes shrinkAndRestore {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      #rerollBtn.clicked {
+        animation: shrinkAndRestore 0.3s ease;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      @keyframes rainbow {
+        0% {
+          color: red;
+        }
+        14% {
+          color: orange;
+        }
+        28% {
+          color: yellow;
+        }
+        42% {
+          color: green;
+        }
+        57% {
+          color: blue;
+        }
+        71% {
+          color: indigo;
+        }
+        85% {
+          color: violet;
+        }
+        100% {
+          color: red;
+        }
+      }
+
+      .rainbow-text {
+        font-size: 50px;
+        font-weight: bold;
+        animation: rainbow 3s linear infinite;
+      }
+    </style>
+  </head>
+  <body style="background-color: rgb(31, 15, 81)">
+    <audio
+      id="theme"
+      autoplay
+      loop
+      src="images/Anime Adventures Lobby Music.mp3"
+    ></audio>
+
+    <audio id="money" src="images/MONEY SOUND EFFECT !!.mp3"></audio>
+
+    <div class="container">
+      <div>
+        <h1 style="color: white">Trait Reroll</h1>
+      </div>
+
+      <div class="trait-roller shadow">
+        <button
+          class="btn"
+          style="
+            background: linear-gradient(135deg, #ffb10b, #ffee74);
+            color: white;
+          "
+        >
+          Trait Chances
+        </button>
+
+        <div style="color: black">.</div>
+        <br />
+        <img
+          src="images/Snímek obrazovky 2024-11-30 214929.png"
+          height="100px"
+        />
+        <img src="images/Snímek obrazovky 2024-11-30 215049.png" height="30" />
+        <img src="images/Snímek obrazovky 2024-11-30 215055.png" height="100" />
+        <div class="main">
+          <div style="color: black">un</div>
+          <div class="trait-display" id="trait">Reroll</div>
+          <div class="alr"></div>
+        </div>
+        <button class="roll-button robux-roller bold" onclick="broke()">
+          Robux reroll
+        </button>
+        <button id="rerollBtn" class="roll-button reroll" onclick="rollTrait()">
+          Reroll
+        </button>
+        <button class="roll-button reroll-token">Reroll Token</button>
+      </div>
+      <div
+        class="text-center"
+        id="rerolledTrait"
+        style="font-size: 50px; color: #4cd13e"
+      >
+        Rerolled Trait
+      </div>
+    </div>
+
+    <audio id="rerollSound" src="images/reroll.mp3"></audio>
+
+    <script>
+      const traits = [
+        {
+          name: "Superior",
+          chance: 24.97,
+          subTraits: ["Superior I", "Superior II", "Superior III"],
+          color: "#0B5FE0",
+          image: "images/Trait_Superior.webp",
+        },
+        {
+          name: "Nimble",
+          chance: 24.98,
+          subTraits: ["Nimble I", "Nimble II", "Nimble III"],
+          color: "#0B5FE0",
+          image: "images/Trait_Nimble.webp",
+        },
+        {
+          name: "Range",
+          chance: 24.98,
+          subTraits: ["Range I", "Range II", "Range III"],
+          color: "#0B5FE0",
+          image: "images/Trait_Range (1).webp",
+        },
+        {
+          name: "Adept",
+          chance: 9.99,
+          color: "#CC9D2C",
+          image: "images/Trait_Adept.webp",
+        },
+        {
+          name: "Culling",
+          chance: 5,
+          color: "#FAE745",
+          image: "images/Trait_Culling.webp",
+        },
+        {
+          name: "Sniper",
+          chance: 2.5,
+          color: "#FAE745",
+          image: "images/Trait_Sniper.webp",
+        },
+        {
+          name: "Godspeed",
+          chance: 1,
+          color: "#FAE745",
+          image: "images/Trait_Godspeed.webp",
+        },
+        {
+          name: "Reaper",
+          chance: 0.8,
+          color: "#EC0D07",
+          image: "images/Trait_Reaper.webp",
+        },
+        {
+          name: "Celestial",
+          chance: 0.36,
+          color: "#EC0D07",
+          image: "images/Trait_Celestial.webp",
+        },
+        {
+          name: "Divine",
+          chance: 0.2,
+          color: "#EC0D07",
+          image: "images/Trait_Divine.webp",
+        },
+        {
+          name: "Golden",
+          chance: 0.15,
+          color: "#EC0D07",
+          image: "images/Trait_Golden.webp",
+        },
+        {
+          name: "Unique",
+          chance: 0.1,
+          color: "#EC0D07",
+          image: "images/Trait_Unique (1).webp",
+        },
+      ];
+
+      function rollTrait() {
+        var sound = document.getElementById("rerollSound");
+        sound.play();
+
+        const randomTrait = getRandomTrait();
+
+        const traitDisplay = document.getElementById("trait");
+        traitDisplay.textContent = randomTrait.name;
+        traitDisplay.style.color = randomTrait.color;
+
+        const imageElement = document.createElement("img");
+        imageElement.src = randomTrait.image;
+        imageElement.height = 50;
+        traitDisplay.insertBefore(imageElement, traitDisplay.firstChild);
+      }
+
+      function getRandomTrait() {
+        const totalChance = traits.reduce(
+          (sum, trait) => sum + trait.chance,
+          0
+        );
+        const randomNum = Math.random() * totalChance;
+        let chanceSum = 0;
+
+        for (let trait of traits) {
+          chanceSum += trait.chance;
+          if (randomNum <= chanceSum) {
+            if (trait.subTraits) {
+              const subTraitIndex = Math.floor(
+                Math.random() * trait.subTraits.length
+              );
+              trait.name = trait.subTraits[subTraitIndex];
+            }
+            return trait;
+          }
+        }
+      }
+
+      document
+        .getElementById("rerollBtn")
+        .addEventListener("click", function () {
+          var rerolledText = document.getElementById("rerolledTrait");
+          var button = document.getElementById("rerollBtn");
+
+          rerolledText.style.display = "block";
+
+          button.classList.add("clicked");
+
+          setTimeout(function () {
+            rerolledText.style.display = "none";
+          }, 1000);
+
+          setTimeout(function () {
+            button.classList.remove("clicked");
+          }, 300);
+        });
+
+      function broke() {
+        var sound = document.getElementById("money");
+        sound.play();
+        alert("Broke boy");
+      }
+
+      var sound = document.getElementById("theme");
+      sound.volume = 0.1;
+    </script>
+  </body>
+</html>
